@@ -1,0 +1,301 @@
+{
+  "schema_version": "1.0",
+  "registry_revision": 1,
+  "workflows": [
+    {
+      "id": "quick_txt2img_v1",
+      "version": "1.0.0",
+      "category": "generate",
+      "workflow_file": "",
+      "config_path_key": "workflow_path",
+      "profiles": {},
+      "required_nodes": [
+        "11",
+        "19"
+      ],
+      "node_mapping": {
+        "positive": "11",
+        "negative": "12",
+        "sampler": "19",
+        "latent": "28"
+      },
+      "capability": {
+        "txt2img": true,
+        "default_profile": ""
+      }
+    },
+    {
+      "id": "reverse_anime_v1",
+      "version": "1.0.0-beta.5",
+      "category": "analyze",
+      "workflow_file": "",
+      "config_path_key": "reverse_workflow_path",
+      "profiles": {},
+      "required_nodes": [
+        "1",
+        "7",
+        "8"
+      ],
+      "node_mapping": {
+        "image": "1",
+        "compiler": "7",
+        "saver": "8"
+      },
+      "capability": {
+        "reverse": true,
+        "default_profile": ""
+      }
+    },
+    {
+      "id": "hq_txt2img_anima_v1",
+      "version": "1.0.0-beta.1",
+      "category": "generate",
+      "workflow_file": "",
+      "config_path_key": "hq_workflow_path",
+      "profiles": {
+        "stable": {
+          "sampling": {
+            "sampler_name": "er_sde",
+            "scheduler": "normal",
+            "steps": 34,
+            "cfg": 4.5,
+            "denoise": 1.0
+          },
+          "enhance": {
+            "scale": 1.25,
+            "sampler_name": "er_sde",
+            "scheduler": "normal",
+            "steps": 18,
+            "cfg": 4.5,
+            "denoise": 0.28
+          }
+        },
+        "beauty": {
+          "sampling": {
+            "sampler_name": "dpmpp_2m_sde_gpu",
+            "scheduler": "normal",
+            "steps": 38,
+            "cfg": 4.5,
+            "denoise": 1.0
+          },
+          "enhance": {
+            "scale": 1.5,
+            "sampler_name": "dpmpp_2m_sde_gpu",
+            "scheduler": "normal",
+            "steps": 20,
+            "cfg": 4.5,
+            "denoise": 0.3
+          }
+        }
+      },
+      "required_nodes": [
+        "11",
+        "12",
+        "19",
+        "28",
+        "29",
+        "30"
+      ],
+      "node_mapping": {
+        "positive": "11",
+        "negative": "12",
+        "sampler": "19",
+        "latent": "28",
+        "upscale": "29",
+        "refiner_sampler": "30"
+      },
+      "capability": {
+        "txt2img": true,
+        "highres": true,
+        "default_profile": "stable",
+        "detailer_default": false,
+        "tile_default": false
+      }
+    },
+    {
+      "id": "refine_existing_v1",
+      "version": "1.0.0-beta.1",
+      "category": "refine",
+      "workflow_file": "",
+      "config_path_key": "refine_workflow_path",
+      "profiles": {
+        "light": {
+          "sampling": {
+            "sampler_name": "er_sde",
+            "scheduler": "normal",
+            "steps": 18,
+            "cfg": 4.5,
+            "denoise": 0.25
+          },
+          "enhance": {
+            "scale": 1.25,
+            "denoise": 0.25
+          }
+        },
+        "medium": {
+          "sampling": {
+            "sampler_name": "dpmpp_2m_sde_gpu",
+            "scheduler": "normal",
+            "steps": 22,
+            "cfg": 4.5,
+            "denoise": 0.35
+          },
+          "enhance": {
+            "scale": 1.5,
+            "denoise": 0.35
+          }
+        }
+      },
+      "required_nodes": [
+        "1",
+        "2",
+        "3",
+        "11",
+        "12",
+        "19"
+      ],
+      "node_mapping": {
+        "image": "1",
+        "upscale": "2",
+        "vae_encode": "3",
+        "positive": "11",
+        "negative": "12",
+        "sampler": "19"
+      },
+      "capability": {
+        "img2img": true,
+        "default_profile": "light",
+        "detailer_default": false,
+        "tile_default": false
+      }
+    },
+    {
+      "id": "detail_repair_anima_v1",
+      "version": "1.0.0-beta.1",
+      "category": "refine",
+      "workflow_file": "",
+      "config_path_key": "detail_repair_workflow_path",
+      "profiles": {
+        "balanced": {
+          "detailer": {
+            "face": {
+              "guide_size": 1024,
+              "max_size": 1536,
+              "steps": 12,
+              "cfg": 4.0,
+              "sampler_name": "er_sde",
+              "scheduler": "beta",
+              "denoise": 0.3,
+              "bbox_threshold": 0.4,
+              "bbox_dilation": 4,
+              "bbox_crop_factor": 2.0,
+              "wildcard": "[CONCAT] detailed face, detailed eyes"
+            },
+            "hands": {
+              "guide_size": 832,
+              "max_size": 1024,
+              "steps": 12,
+              "cfg": 4.0,
+              "sampler_name": "er_sde",
+              "scheduler": "beta",
+              "denoise": 0.35,
+              "bbox_threshold": 0.3,
+              "bbox_dilation": 4,
+              "bbox_crop_factor": 2.0,
+              "wildcard": "[CONCAT] detailed hands, five fingers, anatomically correct hands"
+            },
+            "feet": {
+              "guide_size": 832,
+              "max_size": 1024,
+              "steps": 12,
+              "cfg": 4.0,
+              "sampler_name": "er_sde",
+              "scheduler": "beta",
+              "denoise": 0.32,
+              "bbox_threshold": 0.3,
+              "bbox_dilation": 4,
+              "bbox_crop_factor": 2.1,
+              "wildcard": "[CONCAT] detailed feet, five toes, anatomically correct feet"
+            }
+          }
+        }
+      },
+      "required_nodes": [
+        "1",
+        "9",
+        "11",
+        "12",
+        "15",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "50",
+        "51",
+        "52",
+        "60",
+        "62",
+        "70",
+        "72"
+      ],
+      "node_mapping": {
+        "image": "1",
+        "output": "9",
+        "positive": "11",
+        "negative": "12",
+        "sampler": "52",
+        "face_detailer": "52",
+        "hand_detailer": "62",
+        "foot_detailer": "72"
+      },
+      "capability": {
+        "img2img": true,
+        "detailer": true,
+        "default_profile": "balanced",
+        "detailer_default": [
+          "hands",
+          "feet"
+        ],
+        "tile_default": false
+      }
+    },
+    {
+      "id": "seedvr2_refine_v1",
+      "version": "1.0.0-beta.1",
+      "category": "refine",
+      "workflow_file": "",
+      "config_path_key": "seedvr2_workflow_path",
+      "profiles": {
+        "seedvr2": {
+          "enhance": {
+            "target_resolution": 4096,
+            "color_correction": "lab",
+            "resolution_target": "longest"
+          }
+        }
+      },
+      "required_nodes": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "node_mapping": {
+        "image": "1",
+        "dit_loader": "2",
+        "vae_loader": "3",
+        "upscaler": "4",
+        "output": "5"
+      },
+      "capability": {
+        "img2img": true,
+        "seedvr2": true,
+        "default_profile": "seedvr2",
+        "tile_default": false
+      }
+    }
+  ]
+}

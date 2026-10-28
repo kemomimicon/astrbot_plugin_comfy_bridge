@@ -1,0 +1,753 @@
+{
+  "qq_actions_hub_url": {
+    "description": "QQ 引用收藏/举报连接的本机 Hub HTTP 地址（需同步更新 Hub，不能填写外部网址）",
+    "type": "string",
+    "default": "http://127.0.0.1:6278"
+  },
+  "comfyui_output_root": {
+    "description": "ComfyUI 实际 output 绝对路径（用于随机画风、去元数据及签名副本；Linux 区分大小写）",
+    "type": "string",
+    "default": ""
+  },
+  "safety_mode_enabled": {
+    "description": "安全模式总开关（默认关闭）",
+    "type": "bool",
+    "default": false
+  },
+  "safety_review_scope": {
+    "description": "审核范围：input=仅输入，output=仅输出，both=两者",
+    "type": "string",
+    "default": "both",
+    "options": [
+      "input",
+      "output",
+      "both"
+    ]
+  },
+  "safety_exempt_terms": {
+    "description": "临时放行词：每行一个具体匹配词，不是正则；清空恢复拦截",
+    "type": "text",
+    "default": ""
+  },
+  "safety_admin_umos": {
+    "description": "信用通知管理员私聊 UMO，每行一个，例如 aiocqhttp:FriendMessage:12345678；请按实际平台名填写",
+    "type": "text",
+    "default": ""
+  },
+  "safety_admin_qq": {
+    "description": "Hub 管理账号未绑定 QQ 时使用的管理员 QQ（不得填写群号）",
+    "type": "string",
+    "default": ""
+  },
+  "safety_audit_threshold": {
+    "description": "CLTagger 审核阈值，初始 0.35；需结合实际样本校准",
+    "type": "float",
+    "default": 0.35
+  },
+  "safety_audit_timeout": {
+    "description": "单张输出审核超时秒数；超时不返图、不扣分",
+    "type": "int",
+    "default": 120
+  },
+  "hq_use_seedvr2": {
+    "description": "HQ 使用基础生图 + 局部修复 + SeedVR2 放大（关闭回到旧二次采样）",
+    "type": "bool",
+    "default": false
+  },
+  "hq_detail_hands_default": {
+    "description": "HQ 默认修复手部",
+    "type": "bool",
+    "default": false
+  },
+  "hq_detail_feet_default": {
+    "description": "HQ 默认修复脚部",
+    "type": "bool",
+    "default": false
+  },
+  "hq_detail_face_default": {
+    "description": "HQ 默认修复脸部（当前建议关闭，仅在脸崩时启用）",
+    "type": "bool",
+    "default": false
+  },
+  "detail_face_detector_name": {
+    "description": "脸部检测模型（ComfyUI models/ultralytics 下的相对路径）",
+    "type": "string",
+    "default": "bbox/face_yolov8n.pt"
+  },
+  "detail_hand_detector_name": {
+    "description": "手部检测模型（ComfyUI models/ultralytics 下的相对路径）",
+    "type": "string",
+    "default": "bbox/hand_yolov8s.pt"
+  },
+  "detail_foot_detector_name": {
+    "description": "脚部检测模型（需另行安装到 ComfyUI models/ultralytics/bbox）",
+    "type": "string",
+    "default": "bbox/foot_yolov8x.pt"
+  },
+  "camera_extreme_lora_name": {
+    "description": "极限俯/仰视辅助 LoRA 路径；留空时只使用提示词控制",
+    "type": "string",
+    "default": "",
+    "hint": "仅 camera_pitch=extreme_low/extreme_high 时加载，普通机位不加载。建议放入 models/loras/anima_lora/camera。"
+  },
+  "camera_extreme_lora_strength": {
+    "description": "极限机位 LoRA 模型强度",
+    "type": "float",
+    "default": 0.65
+  },
+  "default_sampler_name": {
+    "description": "默认采样器（原有=沿用工作流）",
+    "type": "string",
+    "default": "er_sde",
+    "options": [
+      "original",
+      "er_sde",
+      "euler",
+      "euler_ancestral",
+      "heun",
+      "dpm_2",
+      "dpm_2_ancestral",
+      "2m",
+      "2m_sde",
+      "2m_sde_gpu",
+      "dpmpp_sde",
+      "dpmpp_3m_sde",
+      "dpmpp_3m_sde_gpu",
+      "lms",
+      "ddim",
+      "uni_pc"
+    ]
+  },
+  "comfyui_base_url": {
+    "description": "ComfyUI API 地址",
+    "type": "string",
+    "default": "http://127.0.0.1:8188",
+    "hint": "填写 AstrBot 服务器能够访问的 ComfyUI 地址。"
+  },
+  "workflow_path": {
+    "description": "ComfyUI API 工作流 JSON 路径",
+    "type": "string",
+    "default": "data/workflows/AAA_QQ_Quick_api.json",
+    "hint": "必须是 Save (API Format) 导出的 JSON。绝对路径或相对插件目录均可。"
+  },
+  "workflow_registry_path": {
+    "description": "Workflow Registry JSON 路径",
+    "type": "string",
+    "default": "data/workflow_registry.json",
+    "hint": "统一登记 Quick、Reverse、HQ 和 Refine 的版本、节点映射与 Profile。相对路径按插件目录解析。"
+  },
+  "hq_workflow_path": {
+    "description": "HQ ComfyUI API 工作流 JSON 路径",
+    "type": "string",
+    "default": "data/workflows/AAA_QQ_HQ_api.json",
+    "hint": "HQ Stable/Beauty 共用一份拓扑，由 Profile 决定采样、放大和重绘参数。"
+  },
+  "refine_workflow_path": {
+    "description": "放大精修 ComfyUI API 工作流 JSON 路径",
+    "type": "string",
+    "default": "data/workflows/AAA_QQ_Refine_api.json",
+    "hint": "Refine Light/Medium 共用一份拓扑；Beta 默认不开启 Detailer 或 Tile。"
+  },
+  "seedvr2_workflow_path": {
+    "description": "SeedVR2 放大 API 工作流 JSON 路径",
+    "type": "string",
+    "default": "",
+    "hint": "需要原生 SeedVR2 VideoUpscaler 与匹配模型。公共模板关闭图像及 VAE 分块；显存不足时降低目标尺寸，不自动启用分块。"
+  },
+  "detail_repair_workflow_path": {
+    "description": "手、脚、脸局部修复 API 工作流 JSON 路径",
+    "type": "string",
+    "default": "",
+    "hint": "用于 HQ 的 SeedVR2 前置修复；需要 Impact Pack、Impact Subpack、SAM 与对应 YOLO 检测模型。"
+  },
+  "job_store_path": {
+    "description": "统一 Job / Asset 记录目录",
+    "type": "string",
+    "default": "",
+    "hint": "使用独立 JSON 保存任务、父子关系、采样参数、LoRA 计划和图片哈希，不迁移现有数据库。"
+  },
+  "positive_prompt_node_id": {
+    "description": "正面提示词节点 ID",
+    "type": "string",
+    "default": "11",
+    "hint": "目标节点 inputs 中必须存在 text。"
+  },
+  "negative_prompt_node_id": {
+    "description": "负面提示词节点 ID",
+    "type": "string",
+    "default": "12",
+    "hint": "留空则不修改工作流里的负面提示词。"
+  },
+  "negative_prompt": {
+    "description": "固定负面提示词",
+    "type": "text",
+    "default": "",
+    "hint": "留空时保留 API 工作流原值。"
+  },
+  "positive_prefix": {
+    "description": "正面提示词前缀",
+    "type": "text",
+    "default": "",
+    "hint": "会放在用户提示词之前；留空不添加。"
+  },
+  "positive_suffix": {
+    "description": "正面提示词后缀",
+    "type": "text",
+    "default": "",
+    "hint": "会放在用户提示词之后；留空不添加。"
+  },
+  "preset_store_path": {
+    "description": "角色与画风预设 JSON 路径",
+    "type": "string",
+    "default": "",
+    "hint": "管理员指令创建的预设会持久化到这里。"
+  },
+  "character_dictionary_enabled": {
+    "description": "启用中文角色名词典",
+    "type": "bool",
+    "default": true,
+    "hint": "角色名未命中 LoRA/文本角色预设时，尝试从离线词典转换为 Danbooru 角色 tag。现有角色预设始终优先。"
+  },
+  "character_dictionary_path": {
+    "description": "中文角色名词典 JSON 路径",
+    "type": "string",
+    "default": "",
+    "hint": "由 tools/build_character_dictionary.py 生成。文件不存在时自动退回原有角色处理，不影响生图。"
+  },
+  "character_dictionary_edits_path": {
+    "description": "角色词典管理覆盖层路径",
+    "type": "string",
+    "default": "",
+    "hint": "由 Hub 管理端维护。禁用、别名、作品和外貌修订保存在此，不会在重建基础词典时丢失。"
+  },
+  "character_dictionary_default_mode": {
+    "description": "中文角色标签默认强度",
+    "type": "string",
+    "default": "weak",
+    "options": [
+      "weak",
+      "strong",
+      "off"
+    ],
+    "hint": "非 QQ 入口未指定模式时使用此值。QQ 生图词典匹配默认 strong；客户端显式选择不受影响。weak 只添加角色与作品 tag；strong 继续添加性别和固定外貌；off 保留原样。单次可用 角色模式=弱|强|关闭 覆盖。"
+  },
+  "prompt_pool_path": {
+    "description": "随机好图提示词池 JSON 路径",
+    "type": "string",
+    "default": "",
+    "hint": "首次使用会复制插件内置提示词库；之后可通过管理指令查询、导入、导出和维护，升级时保留用户修改与删除墓碑。"
+  },
+  "kp_dynamic_enabled": {
+    "description": "K 组启用动态模块拼装",
+    "type": "bool",
+    "default": false,
+    "hint": "开启后从 KP 01-14 模块库实时组合场景、构图、光影、动作、表情、风格等；关闭后继续抽取原有 77 个固定范例。"
+  },
+  "kp_dynamic_modules_path": {
+    "description": "KP 动态模块库 JSON 路径",
+    "type": "string",
+    "default": "data/kp_dynamic_modules.json",
+    "hint": "相对路径按插件目录解析。模块库缺失或损坏时 K 动态抽取会返回明确错误，不影响其他来源组。"
+  },
+  "kp_dynamic_optional_modules_min": {
+    "description": "KP 每张最少附加模块数",
+    "type": "int",
+    "default": 4,
+    "hint": "场景锚点、服装和基础动作不计入此数。建议 3-6。"
+  },
+  "kp_dynamic_optional_modules_max": {
+    "description": "KP 每张最多附加模块数",
+    "type": "int",
+    "default": 7,
+    "hint": "从构图、光影、表情、风格、妆容、细节、道具等不同槽位抽取；必须不小于最少值。"
+  },
+  "kp_dynamic_max_tags": {
+    "description": "KP 动态提示词最大标签数",
+    "type": "int",
+    "default": 72,
+    "hint": "用于限制动态拼装长度；不包含用户额外输入、角色和画风触发词。"
+  },
+  "kp_dynamic_history_limit": {
+    "description": "KP 动态记录保留上限",
+    "type": "int",
+    "default": 2000,
+    "hint": "动态结果会写入 KP 持久化库，供 App 记录页按 ID 点赞并复制到 P 组。至少保留 50 条。"
+  },
+  "kp_dynamic_fallback_examples": {
+    "description": "KP 动态失败时回退固定范例",
+    "type": "bool",
+    "default": true,
+    "hint": "模块库不可读或无法组成有效结果时，自动使用旧的 77 个 N/S 配对范例；建议保持开启。"
+  },
+  "sexual_protected_characters": {
+    "description": "S 组禁用角色名单",
+    "type": "text",
+    "default": "",
+    "hint": "填写后，这些角色即使被显式请求 S 组，也会强制改为 N/H。多个角色可用英文逗号、中文逗号、分号或换行分隔；按角色=名称进行不区分大小写的精确匹配。"
+  },
+  "random_quality_enabled": {
+    "description": "来张好图启用通用质量词",
+    "type": "bool",
+    "default": true
+  },
+  "random_quality_preset_name": {
+    "description": "来张好图质量词预设名",
+    "type": "string",
+    "default": "general",
+    "hint": "默认读取提示词池 quality_presets.general。"
+  },
+  "random_quality_prompt": {
+    "description": "来张好图质量词覆盖",
+    "type": "text",
+    "default": "",
+    "hint": "留空时使用提示词池内置预设；填写后完全覆盖。"
+  },
+  "text_provider_id": {
+    "description": "/aicn 文本模型 Provider ID",
+    "type": "string",
+    "default": "",
+    "hint": "留空时依次使用当前会话模型和 AstrBot 默认文本模型。"
+  },
+  "image_caption_provider_id": {
+    "description": "/aip 旧视觉模型 Provider ID",
+    "type": "string",
+    "default": "",
+    "hint": "仅在关闭专用反推工作流时使用；正常情况下无需配置。"
+  },
+  "llm_prompt_max_tokens": {
+    "description": "中文转换/旧反推最大输出 tokens",
+    "type": "int",
+    "default": 700
+  },
+  "agent_tools_enabled": {
+    "description": "启用 AstrAutoAnima 自主绘图工具",
+    "type": "bool",
+    "default": false,
+    "hint": "独立总开关。关闭时聊天模型不能自主跑图，不影响 /aimg、随机好图、反推、HQ 和精修。"
+  },
+  "agent_generate_tool_enabled": {
+    "description": "启用自主生图 Tool",
+    "type": "bool",
+    "default": true,
+    "hint": "受自主绘图工具总开关控制；关闭后仅禁用 anima_generate_image。"
+  },
+  "agent_preset_tool_enabled": {
+    "description": "启用自主预设查询 Tool",
+    "type": "bool",
+    "default": true,
+    "hint": "允许聊天模型查询角色和画风的准确预设名称。"
+  },
+  "agent_tool_group_enabled": {
+    "description": "允许群聊自主绘图",
+    "type": "bool",
+    "default": false,
+    "hint": "Beta 默认仅开放私聊。确认群聊权限和内容策略后再开启。"
+  },
+  "agent_tool_allow_parameter_override": {
+    "description": "允许模型覆盖自主绘图默认预设",
+    "type": "bool",
+    "default": true,
+    "hint": "开启时模型可按用户要求临时指定角色、画风、比例、质量和采样参数；关闭时始终强制使用下方默认值。"
+  },
+  "agent_tool_default_character": {
+    "description": "自主绘图默认角色预设",
+    "type": "string",
+    "default": "",
+    "hint": "填写 presets.json 中的准确角色名称；留空表示默认无角色。只影响 LLM Tool。"
+  },
+  "agent_tool_default_style": {
+    "description": "自主绘图默认画风预设",
+    "type": "string",
+    "default": "",
+    "hint": "填写 presets.json 中的准确画风名称；留空表示默认无画风，不继承普通 /aimg 默认画风。"
+  },
+  "agent_tool_default_ratio": {
+    "description": "自主绘图默认比例",
+    "type": "string",
+    "default": "2:3",
+    "options": [
+      "1:1",
+      "2:3",
+      "3:2",
+      "3:4",
+      "4:3",
+      "9:16",
+      "16:9"
+    ]
+  },
+  "agent_tool_default_quality": {
+    "description": "自主绘图默认工作流质量",
+    "type": "string",
+    "default": "quick",
+    "options": [
+      "quick",
+      "hq_stable",
+      "hq_beauty"
+    ],
+    "hint": "quick 使用普通生图；hq_stable 和 hq_beauty 使用对应 HQ Profile。"
+  },
+  "agent_tool_default_sampler": {
+    "description": "自主绘图默认采样器预设",
+    "type": "string",
+    "default": "original",
+    "options": [
+      "original",
+      "2m",
+      "2m_sde",
+      "2m_sde_gpu"
+    ]
+  },
+  "agent_tool_default_scheduler": {
+    "description": "自主绘图默认调度器",
+    "type": "string",
+    "default": "workflow",
+    "options": [
+      "workflow",
+      "normal",
+      "karras",
+      "exponential",
+      "sgm_uniform",
+      "simple",
+      "ddim_uniform",
+      "beta",
+      "linear_quadratic",
+      "kl_optimal"
+    ],
+    "hint": "workflow 表示保留所选 Quick/HQ Profile 的调度器原值。"
+  },
+  "agent_tool_default_steps": {
+    "description": "自主绘图默认步数",
+    "type": "int",
+    "default": 0,
+    "hint": "0 表示沿用所选采样器预设；有效自定义范围为 1 到 150。"
+  },
+  "agent_tool_default_cfg": {
+    "description": "自主绘图默认 CFG",
+    "type": "float",
+    "default": 0,
+    "hint": "0 表示沿用所选采样器预设；有效自定义范围为 0.1 到 30。"
+  },
+  "agent_tool_translate_chinese": {
+    "description": "自主绘图收到中文时调用 /aicn 转换",
+    "type": "bool",
+    "default": false,
+    "hint": "关闭时要求 Function Calling 模型直接提供英文 tags；开启后实际画图时可能额外调用一次文本模型。"
+  },
+  "agent_tool_max_prompt_chars": {
+    "description": "自主绘图最大提示词长度",
+    "type": "int",
+    "default": 1800
+  },
+  "agent_tool_user_cooldown_seconds": {
+    "description": "自主绘图单用户冷却秒数",
+    "type": "int",
+    "default": 30,
+    "hint": "管理员豁免；同一用户在上一张成功后需要等待该时长，并且不能同时运行两个自主绘图任务。"
+  },
+  "agent_tool_send_progress": {
+    "description": "自主绘图发送开始提示",
+    "type": "bool",
+    "default": true
+  },
+  "show_converted_tags": {
+    "description": "/aicn 生图前回显转换 tags",
+    "type": "bool",
+    "default": true
+  },
+  "show_reversed_tags": {
+    "description": "/aip 生图前回显反推 tags",
+    "type": "bool",
+    "default": true
+  },
+  "image_wait_seconds": {
+    "description": "/aip 等待下一张图片秒数",
+    "type": "int",
+    "default": 60,
+    "hint": "只捕获同一用户在同一会话发送的第一张图片。"
+  },
+  "input_dir": {
+    "description": "反推输入图片临时目录",
+    "type": "string",
+    "default": ""
+  },
+  "reverse_workflow_enabled": {
+    "description": "/aip 启用专用反推工作流",
+    "type": "bool",
+    "default": true,
+    "hint": "启用后使用 WD-EVA02 + CLTagger v2 + JoyCaption Beta One 的 ComfyUI API 工作流。"
+  },
+  "reverse_workflow_path": {
+    "description": "反推 ComfyUI API 工作流 JSON 路径",
+    "type": "string",
+    "default": "data/workflows/Anima_WD_Only_Reverse_api.json",
+    "hint": "使用工作流安装包内的 API 版本，不是普通界面工作流。"
+  },
+  "reverse_default_preset": {
+    "description": "/aip 默认反推模式",
+    "type": "string",
+    "default": "full",
+    "options": [
+      "full",
+      "scene",
+      "action",
+      "character",
+      "safe",
+      "raw"
+    ],
+    "hint": "指令可用 模式=场景 临时覆盖。"
+  },
+  "reverse_image_node_id": {
+    "description": "反推输入图片节点 ID",
+    "type": "string",
+    "default": "1"
+  },
+  "reverse_compiler_node_id": {
+    "description": "反推 Compiler 节点 ID",
+    "type": "string",
+    "default": "7"
+  },
+  "reverse_saver_node_id": {
+    "description": "反推结果保存节点 ID",
+    "type": "string",
+    "default": "8"
+  },
+  "reverse_history_dir": {
+    "description": "反推历史数据目录",
+    "type": "string",
+    "default": "",
+    "hint": "结构化结果默认标记为 pending_review，供以后审核并入随机提示词库。"
+  },
+  "reverse_save_thumbnail": {
+    "description": "反推历史保存 512px 缩略图",
+    "type": "bool",
+    "default": false,
+    "hint": "关闭可节省空间；结构化结果和图片哈希仍会保存。"
+  },
+  "five_draw_cooldown_seconds": {
+    "description": "非管理员混沌五连抽冷却（秒）",
+    "type": "int",
+    "default": 150,
+    "hint": "仅限制混沌五连抽。普通五连抽改用微批处理，不再使用时间冷却；AstrBot 管理员豁免。"
+  },
+  "five_draw_batch_enabled": {
+    "description": "普通五连抽启用微批处理",
+    "type": "bool",
+    "default": true,
+    "hint": "把提示词合并到同一 Quick 工作流批次中处理。混沌五连抽因角色、画风和比例各不相同，仍逐张执行。"
+  },
+  "five_draw_micro_batch_size": {
+    "description": "普通五连抽微批大小",
+    "type": "int",
+    "default": 2,
+    "hint": "范围 1 到 5。默认 2，即按 2+2+1 执行，适合 32GB 显存；设为 1 等同逐张生成。"
+  },
+  "five_draw_batch_fallback_sequential": {
+    "description": "微批失败时自动逐张回退",
+    "type": "bool",
+    "default": true,
+    "hint": "只重试失败的微批，不会重跑之前已经成功的批次。建议保持开启。"
+  },
+  "five_draw_single_active": {
+    "description": "同一用户只允许一个普通五连抽",
+    "type": "bool",
+    "default": true,
+    "hint": "取代原来的普通五连抽 150 秒冷却；任务结束后立即可以再次抽取。AstrBot 管理员豁免。"
+  },
+  "latent_node_id": {
+    "description": "画布尺寸节点 ID",
+    "type": "string",
+    "default": "28",
+    "hint": "当前工作流为 EmptyLatentImage 节点 28，必须同时包含 width 与 height。"
+  },
+  "default_width": {
+    "description": "默认画布宽度",
+    "type": "int",
+    "default": 1024
+  },
+  "default_height": {
+    "description": "默认画布高度",
+    "type": "int",
+    "default": 1536
+  },
+  "max_canvas_pixels": {
+    "description": "单张画布最大像素数",
+    "type": "int",
+    "default": 2359296,
+    "hint": "默认约等于 1536×1536，用于防止用户提交过大的画布。"
+  },
+  "style_lora_node_ids": {
+    "description": "画风 LoRA 槽位节点 ID",
+    "type": "string",
+    "default": "",
+    "hint": "只有工作流确实包含旧 LoRA 槽位时才填写实际节点 ID；无 LoraLoader 的 Quick 工作流请留空并使用 dynamic。不要将 46,47,48,49 直接填入 Quick 工作流。"
+  },
+  "style_lora_mode": {
+    "description": "画风 LoRA 加载模式",
+    "type": "string",
+    "default": "dynamic",
+    "options": [
+      "dynamic",
+      "fixed"
+    ],
+    "hint": "dynamic 会在每次任务的内存工作流中创建标准 LoraLoader 链，不再受四槽限制；fixed 保持旧工作流槽位模式。"
+  },
+  "dynamic_style_node_id_start": {
+    "description": "动态画风节点起始 ID",
+    "type": "int",
+    "default": 900100,
+    "hint": "动态创建的标准 LoraLoader 从该 ID 开始递增，不能与工作流现有节点冲突。"
+  },
+  "max_dynamic_style_loras": {
+    "description": "单个画风最大 LoRA 数",
+    "type": "int",
+    "default": 16
+  },
+  "character_lora_node_id": {
+    "description": "动态角色 LoRA 节点 ID",
+    "type": "string",
+    "default": "900001",
+    "hint": "仅在选择角色预设时动态创建，必须避免与工作流现有节点 ID 重复。"
+  },
+  "default_style_preset": {
+    "description": "默认画风预设",
+    "type": "string",
+    "default": "",
+    "hint": "留空时不套用预设，保留基础工作流当前的 LoRA 构成。"
+  },
+  "style_auto_match": {
+    "description": "根据提示词字符串自动匹配画风预设",
+    "type": "bool",
+    "default": true,
+    "hint": "管理员可用 --match 为画风预设配置一个或多个识别字符串。"
+  },
+  "sampler_node_id": {
+    "description": "采样器节点 ID",
+    "type": "string",
+    "default": "19",
+    "hint": "用于修改 seed；留空则完全保留工作流种子。"
+  },
+  "dpm_sampler_name": {
+    "description": "DPM++ 2M 预设的采样器名称",
+    "type": "string",
+    "default": "dpmpp_2m",
+    "hint": "使用 采样器=dpm 时写入 KSampler.inputs.sampler_name。若想使用传统 DPM2，可改为 dpm_2。"
+  },
+  "dpm_sampler_steps": {
+    "description": "DPM++ 2M 预设采样步数",
+    "type": "int",
+    "default": 30
+  },
+  "dpm_sampler_cfg": {
+    "description": "DPM++ 2M 预设 CFG",
+    "type": "float",
+    "default": 6.0
+  },
+  "dpm_sampler_scheduler": {
+    "description": "DPM++ 2M 预设调度器",
+    "type": "string",
+    "default": "normal",
+    "hint": "保留当前工作流的 normal 调度器；需要时可改为 ComfyUI 支持的其他 scheduler。"
+  },
+  "dpm_2m_sde_sampler_name": {
+    "description": "DPM++ 2M SDE 预设的采样器名称",
+    "type": "string",
+    "default": "dpmpp_2m_sde",
+    "hint": "使用 采样器=2m_sde 时写入 KSampler.inputs.sampler_name。"
+  },
+  "dpm_2m_sde_sampler_steps": {
+    "description": "DPM++ 2M SDE 预设采样步数",
+    "type": "int",
+    "default": 30
+  },
+  "dpm_2m_sde_sampler_cfg": {
+    "description": "DPM++ 2M SDE 预设 CFG",
+    "type": "float",
+    "default": 6.0
+  },
+  "dpm_2m_sde_sampler_scheduler": {
+    "description": "DPM++ 2M SDE 预设调度器",
+    "type": "string",
+    "default": "normal"
+  },
+  "dpm_2m_sde_gpu_sampler_name": {
+    "description": "DPM++ 2M SDE GPU 预设的采样器名称",
+    "type": "string",
+    "default": "dpmpp_2m_sde_gpu",
+    "hint": "使用 采样器=2m_sde_gpu 时写入 KSampler.inputs.sampler_name。"
+  },
+  "dpm_2m_sde_gpu_sampler_steps": {
+    "description": "DPM++ 2M SDE GPU 预设采样步数",
+    "type": "int",
+    "default": 30
+  },
+  "dpm_2m_sde_gpu_sampler_cfg": {
+    "description": "DPM++ 2M SDE GPU 预设 CFG",
+    "type": "float",
+    "default": 6.0
+  },
+  "dpm_2m_sde_gpu_sampler_scheduler": {
+    "description": "DPM++ 2M SDE GPU 预设调度器",
+    "type": "string",
+    "default": "normal"
+  },
+  "randomize_seed": {
+    "description": "每次随机种子",
+    "type": "bool",
+    "default": true
+  },
+  "fixed_seed": {
+    "description": "固定种子",
+    "type": "int",
+    "default": 385214804456641,
+    "hint": "关闭随机种子时使用。"
+  },
+  "timeout_seconds": {
+    "description": "单次生成超时（秒）",
+    "type": "int",
+    "default": 300
+  },
+  "poll_interval_seconds": {
+    "description": "生成状态查询间隔（秒）",
+    "type": "float",
+    "default": 1.0
+  },
+  "max_images": {
+    "description": "单次最多返回图片数",
+    "type": "int",
+    "default": 4
+  },
+  "max_concurrency": {
+    "description": "最大并发生成数",
+    "type": "int",
+    "default": 1,
+    "hint": "单卡建议先设为 1。"
+  },
+  "send_progress": {
+    "description": "生成开始时发送提示",
+    "type": "bool",
+    "default": true
+  },
+  "output_dir": {
+    "description": "临时结果保存目录",
+    "type": "string",
+    "default": ""
+  },
+  "output_cleanup_enabled": {
+    "description": "自动清理插件结果图片",
+    "type": "bool",
+    "default": false,
+    "hint": "只清理插件 output_dir 中过期的常见图片，不处理 ComfyUI/output。"
+  },
+  "output_retention_hours": {
+    "description": "插件结果图片保留小时数",
+    "type": "float",
+    "default": 48.0,
+    "hint": "依据文件最后修改时间判断，最小值为 48 小时（2 天）；旧值不足两天时也按两天执行。"
+  },
+  "output_cleanup_interval_minutes": {
+    "description": "插件图片自动清理间隔（分钟）",
+    "type": "int",
+    "default": 60,
+    "hint": "插件启动时会先扫描一次，此后按该间隔扫描；最小实际间隔为 5 分钟。"
+  }
+}

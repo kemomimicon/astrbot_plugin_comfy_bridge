@@ -1,0 +1,12 @@
+{
+  "prompts": [
+    {
+      "id": "qq-example-landscape",
+      "prompt": "mountain landscape, lake, daylight",
+      "source_code": "B",
+      "safety_code": "N",
+      "safety_level": "normal",
+      "enabled": true
+    }
+  ]
+}
