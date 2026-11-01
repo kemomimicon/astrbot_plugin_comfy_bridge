@@ -18,7 +18,7 @@
     ".gitignore": "6947604b72081d1be6c7d01b2016d851107993a5f0b088acd0329826c1b5767a",
     "agent_tools_runtime.py": "d38b36d413e605412f0335898ecaf88a0fbf0ccc84a946eb39fb01a117511a2f",
     "camera_runtime.py": "7ee7fdcbf4c809c5483ad2b0c132b357f5ff798bab22aed46954dad0ffb4a50f",
-    "CHANGELOG.md": "252d39e1e42c919fce2e9953fc2f916959d3bc9086a45208d46dad8cb69a45a4",
+    "CHANGELOG.md": "a1e0434dfc8e7df8c9ba504ed5a1b87dbbbcc43068173344ec650298418b8c17",
     "chaos_runtime.py": "00bc3996b50630948f9e2d7fd61d47480c71f667523f8d0dbaeb955535857023",
     "character_dictionary_runtime.py": "474a14a23d88deddf1dd2cacdcf7b6d4f15f492b403166f0909295deb485ca0a",
     "character_query_runtime.py": "315fb413dc0a1e01a5cf6bae3b7f9f6a2528ddaaea74991fb708e490fa808f71",
@@ -38,7 +38,7 @@
     "llm_runtime.py": "d24a319641ca4e9be0b95a19f3cae49c1397da87b8dfb04c17a9bccb8871e125",
     "lora_name_runtime.py": "53f80e469adced803b257ade46a892791a0519ff2aa32235ffd64e4bc4951034",
     "main.py": "030429a708ab4b11ebef15ef12bf5fea0bbefcba90a5feca9c703e6e1c0a1d08",
-    "metadata.yaml": "8dfdd1235d5abb90568295ed0f0b2271a93e0e74a600186b979910fd2a9ffaf9",
+    "metadata.yaml": "ef7d9598c2731f5034db4c56a222ea131692385dcaa755367c354b731bcd5de8",
     "multi_person_runtime.py": "6c3746228ac2a028fcd63df9d1f7409fe3cfaaf5073ade6898e9a8a122d67a88",
     "output_storage_runtime.py": "950acb7207fb9c9bb6118d9b4d54306c9da9f7fb9f2d0b1590083ae069680b6c",
     "personal_prompt_runtime.py": "95f7050ff46ab828523ee1fc31d1f2a3e06a453a5cd261909b3b4e114bd1fad3",
@@ -51,10 +51,10 @@
     "prompt_pool_runtime.py": "40240f9c53e1bb4847b29cb385ce7f105c9d0e877a8be63d091a0620ed22dad6",
     "prompt_snapshot_runtime.py": "d990b1bf49c7c9ab9728bfe96b57a24438473bc789dad1dda67cbcac0689a8c1",
     "qq_image_actions_runtime.py": "a10f154bf785d358f7e36d2ab5dbe76fbba01d9d596c63924a0b8cb5a6d9629b",
-    "QQ指令操作说明.txt": "e146a5c071fa3c35324ae24ca323bfadc790ec26929ed98d9875e800bb49e6df",
+    "QQ指令操作说明.txt": "78717028778d9cdd4604bbfc0e251b70678d172e93d914f051bc10d02e1f8ac9",
     "quote_selection_runtime.py": "8110bfaf1f9738a8636a56a1967fcaac7e102efc89e52fce4afe3cfa5f3bb54b",
     "random_preset_runtime.py": "872af5f237cb8b8610482b14fad718143eddd1983df54655e21f85d6a9fd3da4",
-    "README.md": "a40f4e1bfec6e3ed4904a44fd41dffd2a064335a98bd60f6681786908157aa17",
+    "README.md": "2f1048ee0ba6e8d7c83b011b6041c187025b9d38f03265b5358bfb2a75430180",
     "replay_runtime.py": "e73756cd720d567dde4fed66e4321bb55df9f621b1ee1e41c27764db1f26d43c",
     "requirements.txt": "e82b3bad762306b6dc28cd77b75b9f099a8078528468e6a723d30a6e00200974",
     "safety_bridge.py": "6c14214800a915811a4ebf3a1733383e3efb6e735dcf64cb98aba5aeb952155c",
@@ -96,5 +96,6 @@
     "extras/ComfyUI自定义节点/ComfyUI-AstrAutoAnima-Workflow-Tools/requirements.txt": "21aa828e3ee8b30490bd0ed1456dfb5cd8ab0531e453179fa1c3f3f8616bccdc",
     "extras/ComfyUI自定义节点/ComfyUI-AstrAutoAnima-Workflow-Tools/__init__.py": "93765adfb04418a49ce62ffeaba0f0e736ff376cf045a62649b03298026c45bb"
   },
-  "standalone_repository": "https://github.com/kemomimicon/astrbot_plugin_comfy_bridge"
+  "standalone_repository": "https://github.com/kemomimicon/astrbot_plugin_comfy_bridge",
+  "marketplace_version": "0.5.2-beta.2+qq.1"
 }

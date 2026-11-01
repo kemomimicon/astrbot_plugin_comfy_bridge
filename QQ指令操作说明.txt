@@ -11,7 +11,7 @@ https://github.com/kemomimicon/astrbot_plugin_comfy_bridge
 首次安装已带基础、HQ、Anima精修、WD反推API工作流。按下方说明放好模型、填写ComfyUI地址即可从 `/aimg_status` 开始。
 无需安装 Hub 或桌面客户端；普通英文生图无需LLM API。反推、SeedVR2等扩展按需配置。
 
-- 版本：0.5.2-beta.1+qq.1（AstrAutoAnima 0.5.2-1.44 QQ独立分包）
+- 版本：0.5.2-beta.2+qq.1（AstrAutoAnima 0.5.2-1.44 QQ独立分包）
 - 完整项目：https://github.com/kemomimicon/AstrAutoAnima
 - 插件下载和配套资源：本仓库 Releases
 - 问题反馈：本仓库 Issues；bilibili——ケモミミロリコン
@@ -27,7 +27,7 @@ https://github.com/kemomimicon/astrbot_plugin_comfy_bridge
 不需要安装 Hub、Admin/Service 客户端，不需要 Hub 令牌或 AstrBot OpenAPI Key。
 普通英文生图不需要 LLM API；中文翻译和重跑的自然语言修改使用 AstrBot 自己配置的文本 Provider。
 
-配套包中的 `astrbot_plugin_comfy_bridge-0.5.2-1.44-qq.1.zip` 是 AstrBot 安装文件。
+配套包中的 `astrbot_plugin_comfy_bridge-0.5.2-beta.2-qq.1.zip` 是 AstrBot 安装文件。
 在 AstrBot 插件管理中选择从本地 ZIP 安装这个文件，**不要把外层说明总包当插件上传**。
 插件 ZIP 根目录直接包含 main.py、metadata.yaml、_conf_schema.json，另附 data/workflows 工作流。
 若当前 AstrBot 界面没有本地 ZIP 入口，正常退出 AstrBot，将内层插件 ZIP 解压到实际
