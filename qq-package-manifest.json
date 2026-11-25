@@ -1,6 +1,6 @@
 {
   "display_version": "0.5.3-beta.1-build45-qq.1",
-  "source_commit": "3f1cbd9afcb3ff350f131c2f648a3cd920a0cd97",
+  "source_commit": "0257177a7768763f182c13436f0226fd2ed2a6c3",
   "standalone_qq_chain": true,
   "requires_hub": false,
   "defaults": {
@@ -67,7 +67,7 @@
     "quote_selection_runtime.py": "8110bfaf1f9738a8636a56a1967fcaac7e102efc89e52fce4afe3cfa5f3bb54b",
     "random_preset_runtime.py": "872af5f237cb8b8610482b14fad718143eddd1983df54655e21f85d6a9fd3da4",
     "replay_runtime.py": "e73756cd720d567dde4fed66e4321bb55df9f621b1ee1e41c27764db1f26d43c",
-    "requirements.txt": "2fdfb2374d1d81ba5becb96e4707cd85f80d99d7dcd794e430b7903443ac7ce3",
+    "requirements.txt": "e82b3bad762306b6dc28cd77b75b9f099a8078528468e6a723d30a6e00200974",
     "safety_bridge.py": "6c14214800a915811a4ebf3a1733383e3efb6e735dcf64cb98aba5aeb952155c",
     "safety_runtime.py": "938977b429fb5a896d8731f3a61f18e7b7e31ff28558c970feb1d6be5b4c3842",
     "task_suite_runtime.py": "e302f199a5e8ea2e410da52d2e12870ef7336f326f45df5b8894ea90a2a7605d",
